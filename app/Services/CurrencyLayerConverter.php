@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Collection;
 use App\Exceptions\FailedToConvertCurrencies;
 use App\ValueObjects\CurrencyConversion;
+use DateTimeImmutable;
+use DateTimeInterface;
+use App\ValueObjects\CurrencyConversionForDate;
 
 class CurrencyLayerConverter implements CurrencyConverter
 {
@@ -43,5 +46,39 @@ class CurrencyLayerConverter implements CurrencyConverter
                 );
             })->values()
             ->all();
+    }
+
+    /** @inheritDoc */
+    public function historicalRates(
+        CurrencyCode $source,
+        CurrencyCode $currency,
+        DateTimeInterface $fromDate,
+        DateTimeInterface $toDate
+    ): array {
+        $response = Http::withHeaders([
+            'apiKey' => $this->apiKey,
+        ])->get("https://api.apilayer.com/currency_data/timeframe", [
+            'source' => $source->code,
+            'currencies' => $currency->code,
+            'start_date' => $fromDate->format('Y-m-d'),
+            'end_date' => $toDate->format('Y-m-d'),
+        ]);
+
+        if (!$response->successful()) {
+            throw new FailedToConvertCurrencies();
+        }
+
+        $source = CurrencyCode::fromString($response->json('source'));
+
+        return Collection::make($response->json('quotes'))->map(function ($quote, $date) use ($source) {
+            return new CurrencyConversionForDate(
+                new CurrencyConversion(
+                    $source,
+                    CurrencyCode::fromString(substr(key($quote), 3)),
+                    $quote[key($quote)],
+                ),
+                new DateTimeImmutable($date)
+            );
+        })->values()->toArray();
     }
 }

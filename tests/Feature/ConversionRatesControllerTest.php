@@ -43,7 +43,6 @@ class ConversionRatesControllerTest extends TestCase
             ->assertJsonValidationErrors($errors);
     }
 
-    /** @test */
     public function validationData(): array
     {
         return [

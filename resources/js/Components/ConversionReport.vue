@@ -8,6 +8,14 @@
                 <input type="date" id="date" v-model="date">
             </div>
             <div class="mr-4">
+                <InputLabel for="source">Source Currency</InputLabel>
+                <input type="text" id="source" v-model="source">
+            </div>
+            <div class="mr-4">
+                <InputLabel for="conversion_currency">Conversion Currency</InputLabel>
+                <input type="text" id="conversion_currency" v-model="conversionCurrency">
+            </div>
+            <div class="mr-4">
                 <InputLabel for="intervals">Report Type</InputLabel>
                 <select :value="reportType" id="intervals">
                     <option v-for="(name, int) in intervals" :value="int">{{ name }}</option>
@@ -33,10 +41,13 @@ const intervals = ref({
     monthly: "Range: One Month, Interval: Daily"
 })
 
+const source = ref('USD')
+const conversionCurrency = ref('AUD')
+
 const submitting = ref(false)
 
 function submitReport() {
-    axios.post('api/reports', {
+    axios.post('api/historical-rate-reports', {
         date,
         reportType
     })

@@ -5,9 +5,7 @@
         <div class="flex items-end">
             <div class="mr-4">
                 <InputLabel for="source">Source Currency</InputLabel>
-                <select name="source" id="source" class="rounded" v-model="source">
-                    <option :value="currency" v-for="currency in availableCurrencies">{{ currency }}</option>
-                </select>
+                <input type="text" v-model="source" id="source"/>
             </div>
             <div class="mr-4">
                 <InputLabel for="currencies">Currencies to Convert</InputLabel>
@@ -48,6 +46,7 @@ import {computed, ref} from "vue";
 import axios from "axios";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
 const source = ref('USD');
 const currencies = ref();
@@ -59,11 +58,6 @@ const submitting = ref(false);
 const currenciesArray = computed(() => {
     return currencies.value.split(",")
 })
-const availableCurrencies = ref([
-    'USD',
-    'AUD',
-    'EUR'
-]);
 
 function getLiveConversionRates() {
     if (submitting.value === true) {
