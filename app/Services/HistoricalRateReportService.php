@@ -9,6 +9,7 @@ use App\Jobs\ProcessHistoricalRateReport;
 use App\Models\User;
 use App\Enums\ReportStatus;
 use App\ValueObjects\CurrencyCode;
+use Illuminate\Support\Collection;
 
 class HistoricalRateReportService
 {
@@ -30,5 +31,14 @@ class HistoricalRateReportService
         ProcessHistoricalRateReport::dispatch($report);
 
         return $report;
+    }
+
+    /**
+     * @param User $user
+     * @return Collection<HistoricalRateReport>
+     */
+    public function listForUser(User $user): Collection
+    {
+        return $user->historicalReports;
     }
 }

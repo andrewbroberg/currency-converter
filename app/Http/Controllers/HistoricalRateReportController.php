@@ -7,6 +7,8 @@ use App\Services\HistoricalRateReportService;
 use App\Enums\ReportType;
 use App\Http\Resources\HistoricalRateReportResource;
 use App\ValueObjects\CurrencyCode;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class HistoricalRateReportController extends Controller
 {
@@ -23,5 +25,12 @@ class HistoricalRateReportController extends Controller
         );
 
         return new HistoricalRateReportResource($report);
+    }
+
+    public function index(Request $request, HistoricalRateReportService $historicalRateReportService): AnonymousResourceCollection
+    {
+        return HistoricalRateReportResource::collection(
+            $historicalRateReportService->listForUser($request->user())
+        );
     }
 }

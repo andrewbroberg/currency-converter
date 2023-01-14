@@ -10,6 +10,7 @@ use App\Models\HistoricalRateReport;
 use App\Enums\ReportStatus;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\ProcessHistoricalRateReport;
+use Illuminate\Testing\Fluent\AssertableJson;
 
 class HistoricalRateReportControllerTest extends TestCase
 {
@@ -51,6 +52,36 @@ class HistoricalRateReportControllerTest extends TestCase
             'currency' => 'AUD',
         ]);
     }
+
+    /** @test */
+    public function it_can_return_a_list_of_historical_reports_with_conversions(): void
+    {
+        $user = User::factory()->create();
+        [$report1,] = HistoricalRateReport::factory()
+            ->count(2)
+            ->for($user)
+            ->create([
+                'status' => ReportStatus::COMPLETED
+            ]);
+
+        $this->be($user)
+            ->getJson(route('historical-rates-report.index'))
+            ->assertOk()
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data', 2)
+                    ->has('data.0', fn(AssertableJson $json) =>
+                        $json->whereAll([
+                            'id' => $report1->id,
+                            'status' => ReportStatus::COMPLETED->value,
+                            'type' => $report1->type->value,
+                            'date' => $report1->date->format('Y-m-d'),
+                            'created_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
+                            'updated_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
+                        ])
+                    )
+            );
+    }
+
 
     /** @test */
     public function it_dispatches_the_report_to_be_processed(): void
