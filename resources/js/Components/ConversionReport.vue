@@ -48,8 +48,8 @@ const submitting = ref(false)
 
 function submitReport() {
     axios.post('api/historical-rate-reports', {
-        date,
-        reportType
+        date: date.value,
+        reportType: reportType.value
     })
 }
 

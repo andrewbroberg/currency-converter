@@ -6,7 +6,7 @@ final class CurrencyConversion
 {
     public function __construct(
         public readonly CurrencyCode $source,
-        public readonly CurrencyCode $currencyCode,
+        public readonly CurrencyCode $currency,
         public readonly float $conversionRate,
     )
     {

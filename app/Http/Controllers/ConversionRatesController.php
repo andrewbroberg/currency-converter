@@ -23,7 +23,7 @@ class ConversionRatesController extends Controller
             'source' => $source->code,
             'conversions' => Collection::make($converted)
                 ->mapWithKeys(function (CurrencyConversion $conversion) {
-                    return [$conversion->currencyCode->code => $conversion->conversionRate];
+                    return [$conversion->currency->code => $conversion->conversionRate];
                 })->all(),
         ]);
     }

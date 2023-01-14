@@ -11,7 +11,7 @@ use App\Enums\ReportStatus;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\ProcessHistoricalRateReport;
 
-class HistoricalRatesReportControllerTest extends TestCase
+class HistoricalRateReportControllerTest extends TestCase
 {
     /**
      * @test
@@ -36,7 +36,9 @@ class HistoricalRatesReportControllerTest extends TestCase
         $this->be($user)
             ->postJson(route('historical-rates-report.store', [
                 'date' => '2022-12-01',
-                'reportType' => ReportType::ANNUAL
+                'reportType' => ReportType::ANNUAL,
+                'source' => 'USD',
+                'currency' => 'AUD',
             ]))
             ->assertCreated();
 
@@ -45,6 +47,8 @@ class HistoricalRatesReportControllerTest extends TestCase
             'type' => ReportType::ANNUAL,
             'date' => '2022-12-01 00:00:00',
             'status' => ReportStatus::PENDING,
+            'source' => 'USD',
+            'currency' => 'AUD',
         ]);
     }
 
@@ -58,7 +62,9 @@ class HistoricalRatesReportControllerTest extends TestCase
         $this->be($user)
             ->postJson(route('historical-rates-report.store', [
                 'date' => '2022-12-01',
-                'reportType' => ReportType::ANNUAL
+                'reportType' => ReportType::ANNUAL,
+                'source' => 'USD',
+                'currency' => 'AUD',
             ]))
             ->assertCreated();
 
@@ -72,12 +78,14 @@ class HistoricalRatesReportControllerTest extends TestCase
                 [
                     'date' => 'The date field is required.',
                     'reportType' => 'The report type field is required.',
+                    'source' => 'The source field is required.',
+                    'currency' => 'The currency field is required.',
                 ],
             ],
             'Date field must be a valid date' => [
                 ['date' => 1234],
                 [
-                    'date' => 'The date does not match the format Y-m-d.'
+                    'date' => 'The date is not a valid date.'
                 ]
             ],
             'Date must be in the past' => [

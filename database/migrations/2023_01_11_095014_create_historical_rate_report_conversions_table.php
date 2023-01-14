@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('historical_rate_report_id');
             $table->date('date');
-            $table->char('source_currency', 3);
-            $table->char('conversion_currency', 3);
+            $table->char('source', 3);
+            $table->char('currency', 3);
             $table->unsignedFloat('conversion_rate');
             $table->timestamps();
 
