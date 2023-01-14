@@ -17,7 +17,7 @@
             </div>
             <div class="mr-4">
                 <InputLabel for="intervals">Report Type</InputLabel>
-                <select :value="reportType" id="intervals">
+                <select :value="reportType" id="intervals" v-model="reportType">
                     <option v-for="(name, int) in intervals" :value="int">{{ name }}</option>
                 </select>
             </div>
@@ -32,11 +32,11 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import {ref} from "vue";
 
-const reportType = ref('yearly')
+const reportType = ref('annual')
 const date = ref();
 
 const intervals = ref({
-    yearly: "Range: Yearly, Interval: Monthly",
+    annual: "Range: Yearly, Interval: Monthly",
     semiannual: "Range: Six Months, Interval: Weekly",
     monthly: "Range: One Month, Interval: Daily"
 })
@@ -49,7 +49,9 @@ const submitting = ref(false)
 function submitReport() {
     axios.post('api/historical-rate-reports', {
         date: date.value,
-        reportType: reportType.value
+        reportType: reportType.value,
+        source: source.value,
+        currency: conversionCurrency.value
     })
 }
 
