@@ -75,6 +75,8 @@ class HistoricalRateReportControllerTest extends TestCase
                             'status' => ReportStatus::COMPLETED->value,
                             'type' => $report1->type->value,
                             'date' => $report1->date->format('Y-m-d'),
+                            'source' => 'USD',
+                            'currency' => 'AUD',
                             'created_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
                             'updated_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
                         ])
