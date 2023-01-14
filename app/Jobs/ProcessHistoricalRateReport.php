@@ -82,13 +82,14 @@ class ProcessHistoricalRateReport implements ShouldQueue, ShouldBeUnique
     {
         $dates = CarbonPeriod::between($datePeriod->getStartDate(), $datePeriod->getEndDate())
             ->interval($this->report->type->interval())
+            ->settings(['monthOverflow' => false])
             ->toArray();
 
         return Collection::make($conversionRates)
             ->filter(fn (CurrencyConversionForDate $conversion) => in_array($conversion->date, $dates));
     }
 
-    public function uniqueBy(): int
+    public function uniqueId(): int
     {
         return $this->report->id;
     }

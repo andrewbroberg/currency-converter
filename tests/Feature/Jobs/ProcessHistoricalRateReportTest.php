@@ -101,8 +101,8 @@ class ProcessHistoricalRateReportTest extends TestCase
     {
         yield 'Annual' => [
             ReportType::ANNUAL,
-            '2021-12-01',
-            '2022-12-01',
+            '2021-12-31',
+            '2022-12-31',
             CarbonInterval::month(),
         ];
 

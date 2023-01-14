@@ -16,6 +16,8 @@ class HistoricalRateReportResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
+            'source' => $this->source->code,
+            'currency' => $this->currency->code,
             'date' => $this->date->format('Y-m-d'),
             'status' => $this->status,
             'conversions' => $this->whenLoaded('conversions', fn() => HistoricalRateReportConversionResource::collection($this->conversions)),

@@ -39,6 +39,6 @@ class HistoricalRateReportService
      */
     public function listForUser(User $user): Collection
     {
-        return $user->historicalReports;
+        return $user->historicalReports()->latest()->get();
     }
 }

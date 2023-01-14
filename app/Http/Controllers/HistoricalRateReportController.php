@@ -9,6 +9,9 @@ use App\Http\Resources\HistoricalRateReportResource;
 use App\ValueObjects\CurrencyCode;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Models\HistoricalRateReport;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class HistoricalRateReportController extends Controller
 {
@@ -32,5 +35,12 @@ class HistoricalRateReportController extends Controller
         return HistoricalRateReportResource::collection(
             $historicalRateReportService->listForUser($request->user())
         );
+    }
+
+    public function show(HistoricalRateReport $report): Response
+    {
+        return Inertia::render('ViewHistoricalReport', [
+            'report' => $report->loadMissing('conversions')
+        ]);
     }
 }
