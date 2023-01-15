@@ -4,14 +4,14 @@ namespace App\Contracts;
 
 use App\ValueObjects\CurrencyCode;
 use App\ValueObjects\CurrencyConversion;
-use DateTimeInterface;
 use App\ValueObjects\CurrencyConversionForDate;
+use DateTimeInterface;
 
 interface CurrencyConverter
 {
     /**
-     * @param CurrencyCode $source
-     * @param CurrencyCode[] $currencies
+     * @param  CurrencyCode  $source
+     * @param  CurrencyCode[]  $currencies
      * @return CurrencyConversion[]
      */
     public function liveConversion(CurrencyCode $source, array $currencies): array;

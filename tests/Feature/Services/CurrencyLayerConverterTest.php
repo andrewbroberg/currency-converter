@@ -4,11 +4,11 @@ namespace Tests\Feature\Services;
 
 use App\Services\CurrencyLayerConverter;
 use App\ValueObjects\CurrencyCode;
-use Illuminate\Support\Facades\Http;
 use App\ValueObjects\CurrencyConversion;
-use Tests\TestCase;
 use App\ValueObjects\CurrencyConversionForDate;
 use DateTime;
+use Illuminate\Support\Facades\Http;
+use Tests\TestCase;
 
 class CurrencyLayerConverterTest extends TestCase
 {
@@ -26,8 +26,8 @@ class CurrencyLayerConverterTest extends TestCase
                 ],
                 'source' => 'AUD',
                 'success' => true,
-                'timestamp' => 1337
-            ])
+                'timestamp' => 1337,
+            ]),
         ]);
 
         $currencyConverter = new CurrencyLayerConverter('test-api-key');
@@ -63,21 +63,21 @@ class CurrencyLayerConverterTest extends TestCase
             'https://api.apilayer.com/currency_data/timeframe?source=AUD&currencies=CAD&start_date=2022-12-01&end_date=2022-12-03' => Http::response([
                 'quotes' => [
                     '2022-12-01' => [
-                        'AUDCAD' => 0.925443
+                        'AUDCAD' => 0.925443,
                     ],
                     '2022-12-02' => [
-                        'AUDCAD' => 0.925443
+                        'AUDCAD' => 0.925443,
                     ],
                     '2022-12-03' => [
-                        'AUDCAD' => 0.925443
+                        'AUDCAD' => 0.925443,
                     ],
                 ],
                 'source' => 'AUD',
                 'start_date' => '2022-12-01',
                 'end_date' => '2022-12-03',
                 'success' => true,
-                'timestamp' => 1337
-            ])
+                'timestamp' => 1337,
+            ]),
         ]);
 
         $currencyConverter = new CurrencyLayerConverter('test-api-key');

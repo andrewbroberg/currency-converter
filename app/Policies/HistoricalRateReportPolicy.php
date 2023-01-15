@@ -40,7 +40,6 @@ class HistoricalRateReportPolicy
         return $historicalRateReport->user->is($user);
     }
 
-
     public function forceDelete(User $user, HistoricalRateReport $historicalRateReport): bool
     {
         return $historicalRateReport->user->is($user);

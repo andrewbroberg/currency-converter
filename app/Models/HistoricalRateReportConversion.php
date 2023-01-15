@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
+use App\Casts\CurrencyCodeCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\ValueObjects\CurrencyCode;
-use App\Casts\CurrencyCodeCast;
 
 class HistoricalRateReportConversion extends Model
 {

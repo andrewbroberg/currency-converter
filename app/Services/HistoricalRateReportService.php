@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Enums\ReportType;
-use DateTimeInterface;
-use App\Models\HistoricalRateReport;
-use App\Jobs\ProcessHistoricalRateReport;
-use App\Models\User;
 use App\Enums\ReportStatus;
+use App\Enums\ReportType;
+use App\Jobs\ProcessHistoricalRateReport;
+use App\Models\HistoricalRateReport;
+use App\Models\User;
 use App\ValueObjects\CurrencyCode;
+use DateTimeInterface;
 use Illuminate\Support\Collection;
 
 class HistoricalRateReportService
@@ -34,7 +34,7 @@ class HistoricalRateReportService
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return Collection<HistoricalRateReport>
      */
     public function listForUser(User $user): Collection

@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use App\Casts\CurrencyCodeCast;
+use App\Enums\ReportStatus;
+use App\Enums\ReportType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\ReportType;
-use App\Enums\ReportStatus;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\ValueObjects\CurrencyCode;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Casts\CurrencyCodeCast;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HistoricalRateReport extends Model
 {

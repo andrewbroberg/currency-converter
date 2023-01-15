@@ -2,8 +2,8 @@
 
 namespace App\Casts;
 
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use App\ValueObjects\CurrencyCode as CurrencyCodeValueObject;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class CurrencyCodeCast implements CastsAttributes
 {

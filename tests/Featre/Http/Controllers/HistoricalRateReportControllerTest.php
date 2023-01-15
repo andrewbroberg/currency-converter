@@ -2,21 +2,22 @@
 
 namespace Tests\Featre\Http\Controllers;
 
-use App\Models\User;
-use Tests\TestCase;
-use Carbon\Carbon;
-use App\Enums\ReportType;
-use App\Models\HistoricalRateReport;
 use App\Enums\ReportStatus;
-use Illuminate\Support\Facades\Bus;
+use App\Enums\ReportType;
 use App\Jobs\ProcessHistoricalRateReport;
+use App\Models\HistoricalRateReport;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
+use Tests\TestCase;
 
 class HistoricalRateReportControllerTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider validationData
      */
     public function it_validates_the_request_to_create_a_report(array $payload, array $errors): void
@@ -58,7 +59,7 @@ class HistoricalRateReportControllerTest extends TestCase
     public function it_can_return_a_list_of_historical_reports_with_conversions(): void
     {
         $user = User::factory()->create();
-        [$report1,] = HistoricalRateReport::factory()
+        [$report1] = HistoricalRateReport::factory()
             ->count(2)
             ->for($user)
             ->create([
@@ -68,8 +69,8 @@ class HistoricalRateReportControllerTest extends TestCase
         $this->be($user)
             ->getJson(route('historical-rates-report.index'))
             ->assertOk()
-            ->assertJson(fn(AssertableJson $json) => $json->has('data', 2)
-                ->has('data.0', fn(AssertableJson $json) => $json->whereAll([
+            ->assertJson(fn (AssertableJson $json) => $json->has('data', 2)
+                ->has('data.0', fn (AssertableJson $json) => $json->whereAll([
                     'id' => $report1->id,
                     'status' => ReportStatus::COMPLETED->value,
                     'type' => $report1->type->value,
@@ -82,7 +83,6 @@ class HistoricalRateReportControllerTest extends TestCase
                 )
             );
     }
-
 
     /** @test */
     public function it_dispatches_the_report_to_be_processed(): void
@@ -140,8 +140,8 @@ class HistoricalRateReportControllerTest extends TestCase
                 ],
                 [
                     'currency' => 'The currency and source must be different.',
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -158,9 +158,9 @@ class HistoricalRateReportControllerTest extends TestCase
         $this->be($user)
             ->get(route('historical-rate-report.show', $report->id))
             ->assertOk()
-            ->assertInertia(fn(AssertableInertia $page) => $page
+            ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('ViewHistoricalReport')
-                ->has('report', fn(AssertableInertia $page) => $page
+                ->has('report', fn (AssertableInertia $page) => $page
                     ->where('id', $report->id)
                     ->etc()
                 )

@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\ValueObjects\CurrencyCode;
 use App\Contracts\CurrencyConverter;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Collection;
 use App\Exceptions\FailedToConvertCurrencies;
+use App\ValueObjects\CurrencyCode;
 use App\ValueObjects\CurrencyConversion;
+use App\ValueObjects\CurrencyConversionForDate;
 use DateTimeImmutable;
 use DateTimeInterface;
-use App\ValueObjects\CurrencyConversionForDate;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 
 class CurrencyLayerConverter implements CurrencyConverter
 {
@@ -20,18 +20,18 @@ class CurrencyLayerConverter implements CurrencyConverter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function liveConversion(CurrencyCode $source, array $currencies): array
     {
         $response = Http::withHeaders([
             'apiKey' => $this->apiKey,
-        ])->get("https://api.apilayer.com/currency_data/live", [
+        ])->get('https://api.apilayer.com/currency_data/live', [
             'source' => $source->code,
-            'currencies' => Collection::make($currencies)->map(fn(CurrencyCode $code) => $code->code)->implode(','),
+            'currencies' => Collection::make($currencies)->map(fn (CurrencyCode $code) => $code->code)->implode(','),
         ]);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             throw new FailedToConvertCurrencies();
         }
 
@@ -48,7 +48,7 @@ class CurrencyLayerConverter implements CurrencyConverter
             ->all();
     }
 
-    /** @inheritDoc */
+    /** {@inheritDoc} */
     public function historicalRates(
         CurrencyCode $source,
         CurrencyCode $currency,
@@ -57,14 +57,14 @@ class CurrencyLayerConverter implements CurrencyConverter
     ): array {
         $response = Http::withHeaders([
             'apiKey' => $this->apiKey,
-        ])->get("https://api.apilayer.com/currency_data/timeframe", [
+        ])->get('https://api.apilayer.com/currency_data/timeframe', [
             'source' => $source->code,
             'currencies' => $currency->code,
             'start_date' => $fromDate->format('Y-m-d'),
             'end_date' => $toDate->format('Y-m-d'),
         ]);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             throw new FailedToConvertCurrencies();
         }
 

@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\HistoricalRateReport;
 use App\Enums\ReportStatus;
 use App\Jobs\ProcessHistoricalRateReport;
+use App\Models\HistoricalRateReport;
+use Illuminate\Console\Command;
 
 class ProcessPendingHistoricalRateReports extends Command
 {
@@ -17,7 +17,7 @@ class ProcessPendingHistoricalRateReports extends Command
     {
         HistoricalRateReport::query()
             ->whereStatus(ReportStatus::PENDING)
-            ->each(fn(HistoricalRateReport $report) => ProcessHistoricalRateReport::dispatch($report));
+            ->each(fn (HistoricalRateReport $report) => ProcessHistoricalRateReport::dispatch($report));
 
         return self::SUCCESS;
     }

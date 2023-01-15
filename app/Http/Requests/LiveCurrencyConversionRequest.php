@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\CurrencyCode as CurrencyCodeRule;
 use App\ValueObjects\CurrencyCode;
+use Illuminate\Foundation\Http\FormRequest;
 
 class LiveCurrencyConversionRequest extends FormRequest
 {
@@ -18,7 +18,7 @@ class LiveCurrencyConversionRequest extends FormRequest
         return [
             'source' => ['required', 'string', new CurrencyCodeRule()],
             'currencies' => ['required', 'array', 'max:5'],
-            'currencies.*' => ['required', 'string', 'distinct', new CurrencyCodeRule()]
+            'currencies.*' => ['required', 'string', 'distinct', new CurrencyCodeRule()],
         ];
     }
 

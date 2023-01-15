@@ -2,29 +2,29 @@
 
 namespace Tests\Feature\Jobs;
 
-
-use Tests\TestCase;
-use App\Models\HistoricalRateReport;
-use App\Models\User;
-use App\Enums\ReportType;
-use App\ValueObjects\CurrencyCode;
-use App\Enums\ReportStatus;
-use App\Jobs\ProcessHistoricalRateReport;
-use App\Models\HistoricalRateReportConversion;
-use Carbon\CarbonPeriod;
-use Carbon\CarbonInterval;
 use App\Contracts\CurrencyConverter;
-use Hamcrest\Matchers;
-use DateTime;
-use Carbon\Carbon;
-use App\ValueObjects\CurrencyConversionForDate;
+use App\Enums\ReportStatus;
+use App\Enums\ReportType;
+use App\Jobs\ProcessHistoricalRateReport;
+use App\Models\HistoricalRateReport;
+use App\Models\HistoricalRateReportConversion;
+use App\Models\User;
+use App\ValueObjects\CurrencyCode;
 use App\ValueObjects\CurrencyConversion;
+use App\ValueObjects\CurrencyConversionForDate;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
+use DateTime;
 use Generator;
+use Hamcrest\Matchers;
+use Tests\TestCase;
 
 class ProcessHistoricalRateReportTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider reportTypes
      */
     public function it_can_process_an_reports_for_each_type(ReportType $reportType, string $fromDate, string $toDate, CarbonInterval $interval): void
@@ -38,14 +38,13 @@ class ProcessHistoricalRateReportTest extends TestCase
                 'source' => $usd,
                 'currency' => $aud,
                 'date' => $toDate,
-                'status' => ReportStatus::PENDING
+                'status' => ReportStatus::PENDING,
             ]);
 
         $datesToReturnFromCurrencyConverter = CarbonPeriod::between($fromDate, $toDate)->interval(CarbonInterval::day())->toArray();
         $expectedDates = CarbonPeriod::between($fromDate, $toDate)->interval($interval);
 
-        $return = array_map(fn (Carbon $date) =>
-            new CurrencyConversionForDate(
+        $return = array_map(fn (Carbon $date) => new CurrencyConversionForDate(
                 new CurrencyConversion(
                     $usd,
                     $aud,
@@ -67,19 +66,18 @@ class ProcessHistoricalRateReportTest extends TestCase
 
         $this->assertDatabaseHas(HistoricalRateReport::class, [
             'id' => $report->id,
-            'status' => ReportStatus::COMPLETED
+            'status' => ReportStatus::COMPLETED,
         ]);
 
         $this->assertDatabaseCount(HistoricalRateReportConversion::class, $expectedDates->count());
 
-        $expectedDates->forEach(fn (Carbon $date) =>
-            $this->assertDatabaseHas(HistoricalRateReportConversion::class, [
-               'historical_rate_report_id' => $report->id,
-               'source' => $report->source->code,
-               'currency' => $report->currency->code,
-               'conversion_rate' => 1.337,
-               'date' => $date->format('Y-m-d H:i:s'),
-            ])
+        $expectedDates->forEach(fn (Carbon $date) => $this->assertDatabaseHas(HistoricalRateReportConversion::class, [
+            'historical_rate_report_id' => $report->id,
+            'source' => $report->source->code,
+            'currency' => $report->currency->code,
+            'conversion_rate' => 1.337,
+            'date' => $date->format('Y-m-d H:i:s'),
+        ])
         );
     }
 
@@ -87,7 +85,7 @@ class ProcessHistoricalRateReportTest extends TestCase
     public function it_doesnt_reprocess_a_completed_report(): void
     {
         $report = HistoricalRateReport::factory()->create([
-            'status' => ReportStatus::COMPLETED
+            'status' => ReportStatus::COMPLETED,
         ]);
 
         $this->mock(CurrencyConverter::class)
@@ -97,7 +95,7 @@ class ProcessHistoricalRateReportTest extends TestCase
         ProcessHistoricalRateReport::dispatch($report);
     }
 
-    public function reportTypes() : Generator
+    public function reportTypes(): Generator
     {
         yield 'Annual' => [
             ReportType::ANNUAL,

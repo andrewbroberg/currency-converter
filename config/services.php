@@ -31,6 +31,6 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'currency-layer' => [
-        'key' => env('CURRENCY_LAYER_API_KEY')
-    ]
+        'key' => env('CURRENCY_LAYER_API_KEY'),
+    ],
 ];

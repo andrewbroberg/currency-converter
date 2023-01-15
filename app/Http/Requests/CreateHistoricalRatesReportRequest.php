@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 use App\Enums\ReportType;
 use App\Rules\CurrencyCode;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class CreateHistoricalRatesReportRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class CreateHistoricalRatesReportRequest extends FormRequest
             'date' => ['required', 'date', 'before:today'],
             'reportType' => ['required', new Enum(ReportType::class)],
             'source' => ['required', new CurrencyCode()],
-            'currency' => ['required', new CurrencyCode(), 'different:source']
+            'currency' => ['required', new CurrencyCode(), 'different:source'],
         ];
     }
 }

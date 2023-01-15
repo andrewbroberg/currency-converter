@@ -2,9 +2,8 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\HistoricalRateReport;
-use App\Models\HistoricalRateReportConversion;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin HistoricalRateReport
@@ -20,7 +19,7 @@ class HistoricalRateReportResource extends JsonResource
             'currency' => $this->currency->code,
             'date' => $this->date->format('Y-m-d'),
             'status' => $this->status,
-            'conversions' => $this->whenLoaded('conversions', fn() => HistoricalRateReportConversionResource::collection($this->conversions)),
+            'conversions' => $this->whenLoaded('conversions', fn () => HistoricalRateReportConversionResource::collection($this->conversions)),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -2,22 +2,22 @@
 
 namespace App\Jobs;
 
+use App\Contracts\CurrencyConverter;
+use App\Enums\ReportStatus;
+use App\Enums\ReportType;
+use App\Models\HistoricalRateReport;
+use App\ValueObjects\CurrencyConversionForDate;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonPeriod;
+use DateInterval;
+use DatePeriod;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\HistoricalRateReport;
-use App\Contracts\CurrencyConverter;
-use App\Enums\ReportType;
-use DatePeriod;
-use Carbon\CarbonImmutable;
-use DateInterval;
-use App\Enums\ReportStatus;
 use Illuminate\Support\Collection;
-use App\ValueObjects\CurrencyConversionForDate;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 
 class ProcessHistoricalRateReport implements ShouldQueue, ShouldBeUnique
@@ -59,7 +59,8 @@ class ProcessHistoricalRateReport implements ShouldQueue, ShouldBeUnique
         });
     }
 
-    private function determineDateRanges(CarbonImmutable $date, ReportType $reportType): DatePeriod {
+    private function determineDateRanges(CarbonImmutable $date, ReportType $reportType): DatePeriod
+    {
         $startDate = match ($reportType) {
             ReportType::ANNUAL => $date->subMonths(12),
             ReportType::SEMIANNUAL => $date->subMonths(6),
@@ -74,8 +75,8 @@ class ProcessHistoricalRateReport implements ShouldQueue, ShouldBeUnique
     }
 
     /**
-     * @param array $conversionRates
-     * @param DatePeriod $datePeriod
+     * @param  array  $conversionRates
+     * @param  DatePeriod  $datePeriod
      * @return Collection<CurrencyConversionForDate>
      */
     private function rejectNonRequiredDates(array $conversionRates, DatePeriod $datePeriod): Collection

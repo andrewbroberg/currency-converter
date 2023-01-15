@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Console\Commands;
 
-
-use Tests\TestCase;
-use App\Models\HistoricalRateReport;
 use App\Console\Commands\ProcessPendingHistoricalRateReports;
-use Illuminate\Support\Facades\Bus;
-use App\Jobs\ProcessHistoricalRateReport;
 use App\Enums\ReportStatus;
+use App\Jobs\ProcessHistoricalRateReport;
+use App\Models\HistoricalRateReport;
+use Illuminate\Support\Facades\Bus;
+use Tests\TestCase;
 
 class ProcessPendingHistoricalRateReportsTest extends TestCase
 {
@@ -34,7 +33,7 @@ class ProcessPendingHistoricalRateReportsTest extends TestCase
 
         HistoricalRateReport::factory()
             ->create([
-                'status' => ReportStatus::COMPLETED
+                'status' => ReportStatus::COMPLETED,
             ]);
 
         $this->artisan(ProcessPendingHistoricalRateReports::class)

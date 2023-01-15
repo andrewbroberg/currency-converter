@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CurrencyConverter;
 use App\Http\Requests\LiveCurrencyConversionRequest;
 use App\ValueObjects\CurrencyCode;
-use App\Contracts\CurrencyConverter;
-use Illuminate\Support\Collection;
 use App\ValueObjects\CurrencyConversion;
+use Illuminate\Support\Collection;
 
 class ConversionRatesController extends Controller
 {

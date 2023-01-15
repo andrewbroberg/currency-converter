@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 use App\Models\HistoricalRateReport;
 use App\ValueObjects\CurrencyCode;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
 class HistoricalRateReportConversionFactory extends Factory
 {

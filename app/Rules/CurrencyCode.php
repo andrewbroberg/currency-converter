@@ -3,8 +3,8 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\InvokableRule;
-use TypeError;
 use InvalidArgumentException;
+use TypeError;
 
 class CurrencyCode implements InvokableRule
 {

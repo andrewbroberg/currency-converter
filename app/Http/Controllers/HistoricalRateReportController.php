@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateHistoricalRatesReportRequest;
-use App\Services\HistoricalRateReportService;
 use App\Enums\ReportType;
+use App\Http\Requests\CreateHistoricalRatesReportRequest;
 use App\Http\Resources\HistoricalRateReportResource;
+use App\Models\HistoricalRateReport;
+use App\Services\HistoricalRateReportService;
 use App\ValueObjects\CurrencyCode;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Models\HistoricalRateReport;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -42,7 +42,7 @@ class HistoricalRateReportController extends Controller
         $this->authorize('view', $report);
 
         return Inertia::render('ViewHistoricalReport', [
-            'report' => $report->loadMissing('conversions')
+            'report' => $report->loadMissing('conversions'),
         ]);
     }
 }

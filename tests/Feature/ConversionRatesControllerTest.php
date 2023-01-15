@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Contracts\CurrencyConverter;
-use App\ValueObjects\CurrencyConversion;
+use App\Models\User;
 use App\ValueObjects\CurrencyCode;
+use App\ValueObjects\CurrencyConversion;
+use Tests\TestCase;
 
 class ConversionRatesControllerTest extends TestCase
 {
@@ -33,6 +33,7 @@ class ConversionRatesControllerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider validationData
      */
     public function it_validates_the_request(array $payload, array $errors): void

@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\ReportStatus;
 use App\Enums\ReportType;
 use App\Models\User;
 use App\ValueObjects\CurrencyCode;
-use App\Enums\ReportStatus;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class HistoricalRateReportFactory extends Factory
 {
@@ -18,7 +18,7 @@ class HistoricalRateReportFactory extends Factory
             'currency' => CurrencyCode::fromString('AUD'),
             'status' => ReportStatus::PENDING,
             'type' => ReportType::ANNUAL,
-            'date' => $this->faker->date()
+            'date' => $this->faker->date(),
         ];
     }
 }

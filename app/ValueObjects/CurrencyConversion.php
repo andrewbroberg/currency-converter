@@ -8,8 +8,6 @@ final class CurrencyConversion
         public readonly CurrencyCode $source,
         public readonly CurrencyCode $currency,
         public readonly float $conversionRate,
-    )
-    {
+    ) {
     }
-
 }
