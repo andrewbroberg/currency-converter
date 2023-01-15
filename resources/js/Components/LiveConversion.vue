@@ -49,7 +49,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 const source = ref('USD');
-const currencies = ref();
+const currencies = ref('');
 const query = ref('');
 const conversions = ref([]);
 const conversionSource = ref('')
