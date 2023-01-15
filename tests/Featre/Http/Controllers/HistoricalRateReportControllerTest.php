@@ -133,6 +133,15 @@ class HistoricalRateReportControllerTest extends TestCase
                     'reportType' => 'The selected report type is invalid.',
                 ],
             ],
+            'Source and currency must not be the same' => [
+                [
+                    'source' => 'USD',
+                    'currency' => 'USD',
+                ],
+                [
+                    'currency' => 'The currency and source must be different.',
+                ]
+            ]
         ];
     }
 

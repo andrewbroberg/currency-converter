@@ -15,7 +15,7 @@ class CreateHistoricalRatesReportRequest extends FormRequest
             'date' => ['required', 'date', 'before:today'],
             'reportType' => ['required', new Enum(ReportType::class)],
             'source' => ['required', new CurrencyCode()],
-            'currency' => ['required', new CurrencyCode()]
+            'currency' => ['required', new CurrencyCode(), 'different:source']
         ];
     }
 }
