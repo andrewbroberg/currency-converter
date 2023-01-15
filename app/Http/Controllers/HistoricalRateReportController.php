@@ -39,6 +39,8 @@ class HistoricalRateReportController extends Controller
 
     public function show(HistoricalRateReport $report): Response
     {
+        $this->authorize('view', $report);
+
         return Inertia::render('ViewHistoricalReport', [
             'report' => $report->loadMissing('conversions')
         ]);

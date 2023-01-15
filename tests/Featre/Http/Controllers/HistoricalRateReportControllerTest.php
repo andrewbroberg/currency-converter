@@ -11,6 +11,7 @@ use App\Enums\ReportStatus;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\ProcessHistoricalRateReport;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Inertia\Testing\AssertableInertia;
 
 class HistoricalRateReportControllerTest extends TestCase
 {
@@ -61,26 +62,24 @@ class HistoricalRateReportControllerTest extends TestCase
             ->count(2)
             ->for($user)
             ->create([
-                'status' => ReportStatus::COMPLETED
+                'status' => ReportStatus::COMPLETED,
             ]);
 
         $this->be($user)
             ->getJson(route('historical-rates-report.index'))
             ->assertOk()
-            ->assertJson(fn (AssertableJson $json) =>
-                $json->has('data', 2)
-                    ->has('data.0', fn(AssertableJson $json) =>
-                        $json->whereAll([
-                            'id' => $report1->id,
-                            'status' => ReportStatus::COMPLETED->value,
-                            'type' => $report1->type->value,
-                            'date' => $report1->date->format('Y-m-d'),
-                            'source' => 'USD',
-                            'currency' => 'AUD',
-                            'created_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
-                            'updated_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
-                        ])
-                    )
+            ->assertJson(fn(AssertableJson $json) => $json->has('data', 2)
+                ->has('data.0', fn(AssertableJson $json) => $json->whereAll([
+                    'id' => $report1->id,
+                    'status' => ReportStatus::COMPLETED->value,
+                    'type' => $report1->type->value,
+                    'date' => $report1->date->format('Y-m-d'),
+                    'source' => 'USD',
+                    'currency' => 'AUD',
+                    'created_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
+                    'updated_at' => $report1->created_at->toIso8601ZuluString('microseconds'),
+                ])
+                )
             );
     }
 
@@ -103,6 +102,7 @@ class HistoricalRateReportControllerTest extends TestCase
 
         Bus::assertDispatched(ProcessHistoricalRateReport::class);
     }
+
     public function validationData(): array
     {
         return [
@@ -118,22 +118,59 @@ class HistoricalRateReportControllerTest extends TestCase
             'Date field must be a valid date' => [
                 ['date' => 1234],
                 [
-                    'date' => 'The date is not a valid date.'
-                ]
+                    'date' => 'The date is not a valid date.',
+                ],
             ],
             'Date must be in the past' => [
                 ['date' => '2023-08-01'],
                 [
-                    'date' => 'The date must be a date before today.'
-                ]
+                    'date' => 'The date must be a date before today.',
+                ],
             ],
             'Report type must be a valid type' => [
                 ['reportType' => 'not-valid'],
                 [
-                    'reportType' => 'The selected report type is invalid.'
-                ]
-            ]
+                    'reportType' => 'The selected report type is invalid.',
+                ],
+            ],
         ];
     }
 
+    /** @test */
+    public function a_user_can_view_a_report(): void
+    {
+        $user = User::factory()->create();
+
+        $report = HistoricalRateReport::factory()
+            ->for($user)
+            ->hasConversions(2)
+            ->create();
+
+        $this->be($user)
+            ->get(route('historical-rate-report.show', $report->id))
+            ->assertOk()
+            ->assertInertia(fn(AssertableInertia $page) => $page
+                ->component('ViewHistoricalReport')
+                ->has('report', fn(AssertableInertia $page) => $page
+                    ->where('id', $report->id)
+                    ->etc()
+                )
+            );
+    }
+
+    /** @test */
+    public function a_user_cannot_view_another_users_report(): void
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+
+        $report = HistoricalRateReport::factory()
+            ->for($otherUser)
+            ->hasConversions(2)
+            ->create();
+
+        $this->be($user)
+            ->get(route('historical-rate-report.show', $report->id))
+            ->assertForbidden();
+    }
 }
